@@ -37,6 +37,15 @@
         $(".b").html('{{option_b}} <i class="fa fa-check-circle"></i>');
         $(".a").css('opacity','0.5');
       }
+
+      $(document).on('click','button[name=vote]',function(){
+        vote = this.value;
+        $.post("https://kmti6g8um6.execute-api.eu-central-1.amazonaws.com/my-vote", {vote: vote}, function(result){
+          console.log(result);
+        });
+        return false;
+      });
+
     </script>
   </body>
 </html>
