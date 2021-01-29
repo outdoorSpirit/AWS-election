@@ -25,27 +25,25 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
 
     <script>
-      var vote = "{{vote}}";
-
-      if(vote == "a"){
-        $(".a").prop('disabled', true);
-        $(".a").html('{{option_a}} <i class="fa fa-check-circle"></i>');
-        $(".b").css('opacity','0.5');
-      }
-      if(vote == "b"){
-        $(".b").prop('disabled', true);
-        $(".b").html('{{option_b}} <i class="fa fa-check-circle"></i>');
-        $(".a").css('opacity','0.5');
-      }
-
       $(document).on('click','button[name=vote]',function(){
         vote = this.value;
-        $.post("https://kmti6g8um6.execute-api.eu-central-1.amazonaws.com/my-vote", {vote: vote}, function(result){
+        $.post("https://kmti6g8um6.execute-api.eu-central-1.amazonaws.com/my-vote", {vote: vote}, function(result,status){
           console.log(result);
+          if ("success" == status) {
+            usedButton = $('button.' + vote);
+            usedButton.prop('disabled', true);
+            usedButton.html(vote + ' <i class="fa fa-check-circle"></i>');
+            usedButton.css('opacity','0.5');
+            unusedButton = $('button.' + (vote == 'a' ? 'b' : 'a'));
+            unusedButton.prop('disabled', false);
+            unusedButton.html(vote == 'a' ? 'b' : 'a');
+            unusedButton.css('opacity','1');
+          } else {
+            alert("Произошла ошибка! :(");
+          }
         });
         return false;
       });
-
     </script>
   </body>
 </html>
