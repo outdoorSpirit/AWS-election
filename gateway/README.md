@@ -2,7 +2,9 @@
 
 ## Настройки CORS
 
-![image](https://user-images.githubusercontent.com/1742301/106396842-c99ea500-640a-11eb-8815-fefaad7143a2.png)
+Настройки Cross-Origin запросов. Обратите внимание, что разрешены и GET, и POST запросы (на запись голоса и получение результатов), а так же подключены два источника запросов: my-vote (голосование) и my-vote-result (результаты). 
+
+![image](https://user-images.githubusercontent.com/1742301/106400513-1b512a80-641f-11eb-8a07-c05b55ca3857.png)
 
 ## Маршруты
 
