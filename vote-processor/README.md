@@ -1,5 +1,14 @@
 # Запуск
 
+Vote Processor должен быть запущен на мощностях EC2. Выберите один из вариантов:
+
+* Отдельный Инстанс EC2
+* Launch Template + Target Group
+* Autoscaling Group (on-demand)
+* Autoscaling Group (spot/on-demand)
+
+**Обратите внимание**, что в 11-той и 12-той строчках обработчика надо указать верные очередь SQS и таблицу DynamoDB.
+
 ## Локальный Запуск
 ```
 python -m pip install --user boto3
