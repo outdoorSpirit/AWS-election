@@ -1,3 +1,12 @@
 # Voting Frontend
 
-Деплой: `aws s3 cp . s3://VOTINGBUCKETNAME --recursive --acl public-read`
+Фронтенд состоит из примитивного приложения на javascript. Создайте бакет и настройте его для хостинга веб-сайта, как мы уже делали. Опционально вы можете использовать CloudFront, если предпочитаете более сложное задание. В таком случае для деплоя файлов нужно будет инвалидировать кэш CloudFront.
+
+## Деплой
+
+Подставьте имя вашего бакета в команду заливки файлов
+
+```
+cd voting-frontend
+aws s3 cp . s3://VOTINGBUCKETNAME --recursive --acl public-read
+```
