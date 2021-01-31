@@ -7,11 +7,12 @@ chmod +x processor.py
 ./processor.py
 ```
 
-## Запуск на инстансе EC2
+## Запуск на инстансе EC2 (User Data)
 ```
+#!/bin/bash
 curl https://raw.githubusercontent.com/HadesArchitect/MyVoteAWS/main/vote-processor/processor.py > processor.py
 chmod +x processor.py
-sudo yum install python-pip
+yum -y install python-pip
 python -m pip install --user boto3
 ./processor.py
 ```
