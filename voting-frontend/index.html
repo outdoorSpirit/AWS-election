@@ -25,6 +25,8 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
 
     <script>
+      var backend_url = "https://kmti6g8um6.execute-api.eu-central-1.amazonaws.com/my-vote"
+
       $.ajaxSetup({
           headers: {
               'Content-Type': 'application/json',
@@ -34,7 +36,7 @@
 
       $(document).on('click','button[name=vote]',function(){
         vote = this.value;
-        $.post("https://kmti6g8um6.execute-api.eu-central-1.amazonaws.com/my-vote", JSON.stringify({ "vote": vote }), function(result,status){
+        $.post(backend_url, JSON.stringify({ "vote": vote }), function(result,status){
           console.log(result);
           if ("success" == status) {
             usedButton = $('button.' + vote);
