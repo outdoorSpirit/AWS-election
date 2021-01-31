@@ -9,4 +9,4 @@
 * [Бэкенд голосования, Python](./voting-backend)
 * [Обработчик голосов, Python](./vote-processor)
 * [Бэкенд результатов, NodeJS](./result-backend)
-* [Фронтенд результатов, Javascript](./result-backend)
+* [Фронтенд результатов, Javascript](./result-frontend)
