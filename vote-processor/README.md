@@ -1,4 +1,4 @@
-# Запуск
+# Vote Processor
 
 Vote Processor должен быть запущен на мощностях EC2. Выберите один из вариантов:
 
@@ -8,6 +8,11 @@ Vote Processor должен быть запущен на мощностях EC2.
 * Autoscaling Group (spot/on-demand)
 
 **Обратите внимание**, что в 11-той и 12-той строчках обработчика надо указать верные очередь SQS и таблицу DynamoDB.
+
+## Рекомендуемая конфигурация
+
+* Amazon Linux 2
+* T2.Micro
 
 ## Локальный Запуск
 ```
@@ -25,8 +30,6 @@ yum -y install python-pip
 python -m pip install --user boto3
 ./processor.py
 ```
-
-# Зависимости
 
 ## Политики
 
