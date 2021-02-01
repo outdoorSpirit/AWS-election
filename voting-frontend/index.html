@@ -17,7 +17,7 @@
           <button id="b" type="submit" name="vote" class="b" value="b">B</button>
         </form>
         <div id="tip">
-          (Подсказка: вы можете поменять выбор)
+          (Подсказка: вы можете голосовать несколько раз)
         </div>
       </div>
     </div>
@@ -47,6 +47,7 @@
             unusedButton.prop('disabled', false);
             unusedButton.html(vote == 'a' ? 'b' : 'a');
             unusedButton.css('opacity','1');
+            setTimeout(function(){usedButton.prop('disabled', false); usedButton.html(vote);}, 2000);
           } else {
             alert("Произошла ошибка! :(");
           }
