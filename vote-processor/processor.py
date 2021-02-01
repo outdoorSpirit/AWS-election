@@ -18,6 +18,7 @@ def process_message(message):
         vote  = payload['MessageAttributes']['vote']['Value']
         logging.info("Voter: %s, Vote: %s", voter, vote)
         store_vote(voter, vote)
+        update_count(vote)
         message.delete()
     except Exception as e:
         logging.error("Failed to process message")
@@ -31,6 +32,14 @@ def store_vote(voter, vote):
     except:
         logging.error("Failed to store message")
         raise
+
+def update_count(vote):
+    table.update_item(
+        Key={'voter': 'count'},
+        UpdateExpression="set #vote = #vote + :incr",
+	    ExpressionAttributeNames={'#vote': vote},
+	    ExpressionAttributeValues={':incr': 1}
+    )
 
 if __name__ == "__main__":
     while True:
