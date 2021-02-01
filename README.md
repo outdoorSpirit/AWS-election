@@ -10,6 +10,7 @@
 
 * ✅ EC2
 * ✅ S3
+* ✅ CloudFront
 * ✅ Базы Данных (DynamoDB)
 * ✅ VPC
 * ✅ Очереди SQS
@@ -18,7 +19,6 @@
 * ✅ IAM
 
 По желанию:
-* ⚠️ CloudFront
 * ⚠️ IaaC (Terraform, CloudFormation, Cloud Development Kit)
 * ⚠️ Billing и Costs
 
