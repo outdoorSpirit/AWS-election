@@ -59,8 +59,11 @@ python -m pip install --user boto3
     "Version": "2012-10-17",
     "Statement": [
         {
-             "Effect": "Allow",
-            "Action": "dynamodb:PutItem",
+            "Effect": "Allow",
+            "Action": [
+                "dynamodb:PutItem",
+                "dynamodb:UpdateItem"
+            ],
             "Resource": "arn:aws:dynamodb:*:ACCOUNT:table/TABLENAME"
         }
     ]
