@@ -18,7 +18,7 @@
 * ✅ IAM
 
 По желанию:
-* CloudFront
+* ⚠️ CloudFront
 * ⚠️ IaaC (Terraform, CloudFormation, Cloud Development Kit)
 * ⚠️ Billing и Costs
 
