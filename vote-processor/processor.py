@@ -8,8 +8,8 @@ import sys
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 
-queue = boto3.resource('sqs', region_name='eu-central-1').get_queue_by_name(QueueName="my-vote")
-table = boto3.resource('dynamodb', region_name='eu-central-1').Table('Votes')
+queue = boto3.resource('sqs', region_name='us-east-1').get_queue_by_name(QueueName="erjan")
+table = boto3.resource('dynamodb', region_name='us-east-1').Table('Votes')
 
 def process_message(message):
     try:
