@@ -24,7 +24,7 @@ chmod +x processor.py
 ## Запуск на инстансе EC2 (User Data)
 ```
 #!/bin/bash
-curl https://raw.githubusercontent.com/HadesArchitect/MyVoteAWS/main/vote-processor/processor.py > processor.py
+curl https://raw.githubusercontent.com/erjan/MyVoteAWS/main/vote-processor/processor.py > processor.py
 chmod +x processor.py
 yum -y install python-pip
 python -m pip install --user boto3
