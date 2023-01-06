@@ -36,6 +36,5 @@
 
 ## Архитектура
 
-**Заменить на картинку**
 
-voting-frontend (S3) --> API Gateway --> voting-backend (Lambda) --> SNS --> SQS --> vote-processor (EC2) --> DynamoDB <-- result-backend (lambda) <-- API Gateway <-- result-frontend (S3)
+![Screenshot_21](https://user-images.githubusercontent.com/4441068/210948938-036bd569-41ed-4752-b1f0-afa3258d7f73.png)
