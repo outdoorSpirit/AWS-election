@@ -31,8 +31,6 @@ python -m pip install --user boto3
 ./processor.py
 ```
 
-## Politicians
-
 ### Policy for SQS
 
 ```
