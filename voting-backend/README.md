@@ -1,20 +1,19 @@
 # Voting Backend
 
-С бэкендом для голосования всё должно быть просто - поправьте 26-ую строчку, чтобы она указывала на нужный топик, и создайте новую лямбда-функцию, используя [представленный образец](./voting.py).
+The voting backend should be easy - fix line 26 to point to the correct topic and create a new lambda function using the provided sample.
 
-Для того, чтобы функция могла публиковать сообщения в топике, она должна иметь соответствующую политику, присоединённую к роли. Это можно сделать вот так:
-
+In order for a function to post to a topic, it must have the appropriate policy attached to the role. It can be done like this:
 ```
 {
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Effect": "Allow",
-            "Action": ["sns:Publish"],
-            "Resource": "arn:aws:sns:*:*:*"
-        }
-    ]
+     "Version": "2012-10-17",
+     "Statement": [
+         {
+             "Effect": "Allow",
+             "Action": ["sns:Publish"],
+             "Resource": "arn:aws:sns:*:*:*"
+         }
+     ]
 }
 ```
 
-Приведённый пример будет работать, однако у него есть недостаток: в этом случае функция может публиковать сообщения в любой топик, а это излишне. Попробуйте настроить политику таким образом, чтобы отправка сообщений была возможна только в один топик.
+The above example will work, but it has a drawback: in this case, the function can publish messages to any topic, and this is redundant. Try setting the policy so that messages can only be sent to one topic.
