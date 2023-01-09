@@ -27,7 +27,7 @@ function updateScores (){
             if(a + b > 0){
                 valueA.text(Math.round((a/(a+b) * 100) * 10) / 10 + "%");
                 valueB.text(Math.round((b/(a+b) * 100) * 10) / 10 + "%");
-                total.text("Всего голосов: " + (a + b))
+                total.text("total votes: " + (a + b))
             }
         } else {
             console.log(result);
