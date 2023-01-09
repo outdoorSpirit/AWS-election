@@ -1,14 +1,14 @@
 # My Vote AWS
 
-Материалы для самостоятельной работы  AWS Slurm (база). Приложение уже написано, и вам осталось лишь развернуть его, используя изученные технологии! Система вам уже знакома по модулю Infrastructure as a Code, это демонстрационное приложение для голосования, но в этот раз оно переработано, чтобы использовать возможности AWS напрямую: она состоит из двух фронтенд-компонент (JS Single-Page Application) и трёх бэкенд-компонент (Python). 
+AWS Slurm DIY Materials (Basic). The application is already written, and all you have to do is deploy it using the technologies you have learned! The system is already familiar to you from the Infrastructure as a Code module, it is a demo application for voting, but this time it is redesigned to use the capabilities of AWS directly: it consists of two front-end components (JS Single-Page Application) and three back-end components ( Python).
 
-Мы предлагаем такую схему: опубликовать статические файлы в бакетах S3 (по одному для каждого фронтенда), разместить бэкенды как функции Lambda и предоставить к ним доступ при помощи API Gateway. Обработчик голосов предлагаем запустить на мощностях EC2, хотя вы можете предпочесть чистый серверлесс.
+We propose the following scheme: publish static files in S3 buckets (one for each frontend), host backends as Lambda functions and make them accessible using API Gateway. We suggest running the voice processor on EC2, although you may prefer pure serverless.
 
 ![image](https://user-images.githubusercontent.com/1742301/106404317-b9022500-6432-11eb-94ed-602d2b27b8fb.png)
 
-Обратите внимание, что, хотя весь код уже написан, вам предстоит немало работы по созданию ресурсов (очередей, таблиц DynamoDB) и назначению к ним доступа. По необходимости используйте подсказки, расположенные в соответствующих папках.
+Note that while all the code has already been written, you still have a lot of work to do in creating resources (queues, DynamoDB tables) and assigning access to them. If necessary, use the hints located in the appropriate folders.
 
-## Используемые Технологии
+## Used tech
 
 * ✅ EC2
 * ✅ S3
@@ -20,21 +20,21 @@
 * ✅ Serverless (API Gateway, Lambda)
 * ✅ IAM
 
-По желанию:
+Challenge:
 * ⚠️ IaaC (Terraform, CloudFormation, Cloud Development Kit)
 * ⚠️ Billing и Costs
 
-## Компоненты
+## Components
 
 * [API Gateway](./gateway)
-* [Фронтенд голосования, Javascript](./voting-frontend)
-* [Бэкенд голосования, Python](./voting-backend)
-* [Обработчик голосов, Python](./vote-processor)
-* [База Данных, DynamoDB](./dynamodb)
-* [Бэкенд результатов, Python](./result-backend)
-* [Фронтенд результатов, Javascript](./result-frontend)
+* [voting frontend, Javascript](./voting-frontend)
+* [voting backend, Python](./voting-backend)
+* [vote processor, Python](./vote-processor)
+* [database, DynamoDB](./dynamodb)
+* [result backend, Python](./result-backend)
+* [result frontend, Javascript](./result-frontend)
 
-## Архитектура
+## Architecture
 
 
 ![Screenshot_21](https://user-images.githubusercontent.com/4441068/210948938-036bd569-41ed-4752-b1f0-afa3258d7f73.png)
