@@ -1,10 +1,10 @@
 # Voting Frontend
 
-Фронтенд состоит из примитивного приложения на javascript. Создайте бакет и настройте его для хостинга веб-сайта, как мы уже делали. Опционально вы можете использовать CloudFront, если предпочитаете более сложное задание. В таком случае для деплоя файлов нужно будет инвалидировать кэш CloudFront.
+The frontend consists of a primitive javascript application. Create a bucket and set it up for hosting a website, as we already did. Optionally, you can use CloudFront if you prefer a more complex task. In this case, to deploy files, you will need to invalidate the CloudFront cache.
 
-## Деплой
+## Deploy
 
-Подставьте имя вашего бакета в команду заливки файлов. Файлы можно загружать и вручную, но я рекомендую привыкать к AWS Cli. В 28-ой строке файла [index.html](./index.html#L28) поправьте путь к бэкенду - это будет адрес API Gateway ([подсказки тут](../gateway)).
+Substitute your bucket name in the file upload command. Files can also be uploaded manually, but I recommend getting used to AWS Cli. In the 28th line of the [index.html](./index.html#L28) file, correct the path to the backend - this will be the address of the API Gateway ([hints here](../gateway)).
 
 ```
 cd voting-frontend
