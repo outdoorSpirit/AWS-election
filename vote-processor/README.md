@@ -1,27 +1,27 @@
 # Vote Processor
 
-Vote Processor должен быть запущен на мощностях EC2. Выберите один из вариантов:
+Vote Processor must be running on EC2 facilities. Choose one of the options:
 
-* Отдельный Инстанс EC2
+* Separate EC2 Instance
 * Launch Template + Target Group
 * Autoscaling Group (on-demand)
 * Autoscaling Group (spot/on-demand)
 
-**Обратите внимание**, что в 11-той и 12-той строчках обработчика надо указать верные очередь SQS и таблицу DynamoDB.
+**Please note** that in the 11th and 12th lines of the handler, you must specify the correct SQS queue and DynamoDB table.
 
-## Рекомендуемая конфигурация
+## Recommended configuration
 
-* Amazon Linux 2
-* T2.Micro
+*Amazon Linux 2
+*T2.Micro
 
-## Локальный Запуск
+## Local Run
 ```
 python -m pip install --user boto3
 chmod +x processor.py
 ./processor.py
 ```
 
-## Запуск на инстансе EC2 (User Data)
+## Run on EC2 instance (User Data)
 ```
 #!/bin/bash
 curl https://raw.githubusercontent.com/erjan/MyVoteAWS/main/vote-processor/processor.py > processor.py
@@ -31,41 +31,41 @@ python -m pip install --user boto3
 ./processor.py
 ```
 
-## Политики
+## Politicians
 
-### Политика для SQS
+### Policy for SQS
 
 ```
 {
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Effect": "Allow",
-            "Action": [
-                "sqs:GetQueueUrl",
-                "sqs:ReceiveMessage",
-                "sqs:DeleteMessage"
-            ],
-            "Resource": "arn:aws:sqs:*:ACCOUNT:QUEUENAME"
-        }
-    ]
+     "Version": "2012-10-17",
+     "Statement": [
+         {
+             "Effect": "Allow",
+             "Action": [
+                 "sqs:GetQueueUrl",
+                 "sqs:ReceiveMessage",
+                 "sqs:DeleteMessage"
+             ],
+             "Resource": "arn:aws:sqs:*:ACCOUNT:QUEUENAME"
+         }
+     ]
 }
 ```
 
-### Политика для DynamoDB
+### Policy for DynamoDB
 
 ```
 {
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Effect": "Allow",
-            "Action": [
-                "dynamodb:PutItem",
-                "dynamodb:UpdateItem"
-            ],
-            "Resource": "arn:aws:dynamodb:*:ACCOUNT:table/TABLENAME"
-        }
-    ]
+     "Version": "2012-10-17",
+     "Statement": [
+         {
+             "Effect": "Allow",
+             "Action": [
+                 "dynamodb:PutItem",
+                 "dynamodb:UpdateItem"
+             ],
+             "Resource": "arn:aws:dynamodb:*:ACCOUNT:table/TABLENAME"
+         }
+     ]
 }
 ```
