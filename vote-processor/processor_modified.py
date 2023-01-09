@@ -3,7 +3,6 @@
 import boto3
 import json
 import logging
-#import exception
 import sys
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
@@ -13,21 +12,21 @@ table = boto3.resource('dynamodb', region_name='us-east-1').Table('Votes')
 
 def process_message(message):
     try:
-        payload = json.loads(message.body)
-        voter = payload['MessageAttributes']['voter']['Value']
-        vote  = payload['MessageAttributes']['vote']['Value']
+        payload = message.message_attributes
+        voter = payload['voter']['StringValue']
+        vote  = payload['vote']['StringValue']
+
         logging.info("Voter: %s, Vote: %s", voter, vote)
-        store_vote(voter, vote)
         update_count(vote)
         message.delete()
     except Exception as e:
-        logging.error("Failed to process message")
-        logging.error(str(e))
+        print('-----EXCEPTION-----')
 
 def store_vote(voter, vote):
     try:
         logging.info('table put item.......')
-        print('table put item......')
+
+        #here is the error i had! i WAS PUTTING THIS THING INTO TABLE - REWRITING MY OWN 'A' AND 'B'
         response = table.put_item(
            Item={'voter': voter, 'vote': vote}
         )
@@ -37,18 +36,26 @@ def store_vote(voter, vote):
 
 def update_count(vote):
     logging.info('update count....')
-    print('update count....')
-    table.update_item(
-        Key={'voter': 'count'},
-        UpdateExpression="set #vote = #vote + :incr",
-            ExpressionAttributeNames={'#vote': vote},
-            ExpressionAttributeValues={':incr': 1}
-    )
+    cur_count = 0
+    if vote == 'b':
+        response = table.get_item(Key = {'voter':'count'})
+        item = response['Item']
+        item['b'] +=1
+        table.put_item(Item = item)
+            
+    elif vote == 'a':
+        table.update_item(
+        Key={'voter':'count'},
+        UpdateExpression="ADD a :incr",
+        ExpressionAttributeValues={':incr': 1})
 
 if __name__ == "__main__":
+
+    logging.info('--------inside main-------')
+
     while True:
         try:
-            messages = queue.receive_messages()
+            messages = queue.receive_messages(MessageAttributeNames=['vote','voter'])
         except KeyboardInterrupt:
            logging.info("Stopping...")
            break
