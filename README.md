@@ -13,10 +13,10 @@ Note that while all the code has already been written, you still have a lot of w
 * ✅ EC2
 * ✅ S3
 * ✅ CloudFront
-* ✅ Базы Данных (DynamoDB)
+* ✅ database (DynamoDB)
 * ✅ VPC
-* ✅ Очереди SQS
-* ✅ Уведомления SNS
+* ✅ SQS queue
+* ✅ SNS notifications
 * ✅ Serverless (API Gateway, Lambda)
 * ✅ IAM
 
