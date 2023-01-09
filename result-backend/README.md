@@ -1,3 +1,3 @@
 # Results Backend
 
-Лямбда-функция, доступная фронтенду через API Gateway. Предложенный код приведён [в файле](results.py).
+Lambda function available to the frontend via API Gateway. The proposed code is given in the file.
