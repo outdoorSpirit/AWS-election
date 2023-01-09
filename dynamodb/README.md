@@ -2,11 +2,11 @@
 
 ## Данные
 
-* Тип: on-demand
-* Имя таблицы: `Votes` (Можно использовать своё, но тогда поправьте код.)
-* Ключ раздела: `voter` (Строка. Можно использовать своё, но тогда поправьте код.)
+* type: on demand
+* table name: `Votes` (you can use your own.)
+* Partition key: `voter` (string you can use your own.)
 
-Приложение не использует миграции баз данных, поэтому пожалуйста самостоятельно добавьте следующую запись в таблицу:
+The application does not use database migrations, so please add the following entry to the table yourself:
 
 ```
 {
