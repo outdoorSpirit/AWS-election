@@ -37,12 +37,13 @@ def store_vote(voter, vote):
 def update_count(vote):
     logging.info('update count....')
     cur_count = 0
+    # get/put method
     if vote == 'b':
         response = table.get_item(Key = {'voter':'count'})
         item = response['Item']
         item['b'] +=1
         table.put_item(Item = item)
-            
+    # update expression 
     elif vote == 'a':
         table.update_item(
         Key={'voter':'count'},
