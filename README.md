@@ -1,6 +1,6 @@
 # My Vote AWS
 
-AWS Slurm DIY Materials (Basic). The application is already written, and all you have to do is deploy it using the technologies you have learned! The system is already familiar to you from the Infrastructure as a Code module, it is a demo application for voting, but this time it is redesigned to use the capabilities of AWS directly: it consists of two front-end components (JS Single-Page Application) and three back-end components ( Python).
+The application is already written, and all you have to do is deploy it using the technologies you have learned! The system is already familiar to you from the Infrastructure as a Code module, it is a demo application for voting, but this time it is redesigned to use the capabilities of AWS directly: it consists of two front-end components (JS Single-Page Application) and three back-end components ( Python).
 
 We propose the following scheme: publish static files in S3 buckets (one for each frontend), host backends as Lambda functions and make them accessible using API Gateway. We suggest running the vote processor on EC2, although you may prefer pure serverless.
 
