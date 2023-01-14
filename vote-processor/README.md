@@ -24,7 +24,8 @@ chmod +x processor.py
 ## Run on EC2 instance (User Data)
 ```
 #!/bin/bash
-curl https://raw.githubusercontent.com/erjan/MyVoteAWS/main/vote-processor/processor.py > processor.py
+curl https://raw.githubusercontent.com/erjan/MyVoteAWS/main/vote-processor/processor.py > /home/ec2-user/processor.py
+cd /home/ec2-user/
 chmod +x processor.py
 yum -y install python-pip
 python -m pip install --user boto3
