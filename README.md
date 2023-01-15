@@ -36,5 +36,5 @@ Challenge:
 
 ## Architecture
 
+![Screenshot_31](https://user-images.githubusercontent.com/4441068/212555129-23469099-f307-423b-bf3d-2cd50f185cea.png)
 
-![Screenshot_21](https://user-images.githubusercontent.com/4441068/210948938-036bd569-41ed-4752-b1f0-afa3258d7f73.png)
