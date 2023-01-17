@@ -24,12 +24,16 @@ chmod +x processor.py
 ## Run on EC2 instance (User Data)
 ```
 #!/bin/bash
+echo "---------------------------------------------
+echo "this script was run on" $(date +"%T")
+echo "---------------------------------------------
 curl https://raw.githubusercontent.com/erjan/MyVoteAWS/main/vote-processor/processor.py > /home/ec2-user/processor.py
 cd /home/ec2-user/
-chmod +x processor.py
-yum -y install python-pip
-python -m pip install --user boto3
-./processor.py
+sudo chmod +x processor.py
+sudo yum -y install python3-pip
+sudo yum -y install python3 python3-setuptools
+sudo pip3 install boto3 
+sudo python3 processor.py
 ```
 
 ### Policy for SQS
