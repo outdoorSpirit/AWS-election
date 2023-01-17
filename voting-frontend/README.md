@@ -14,7 +14,7 @@ aws s3 cp . s3://VOTINGBUCKETNAME --recursive --acl public-read
 
 
 ## sample bucket policy for s3 vote - integration with cloudfront
-
+```
 {
     "Version": "2012-10-17",
     "Statement": [
@@ -45,3 +45,4 @@ aws s3 cp . s3://VOTINGBUCKETNAME --recursive --acl public-read
         }
     ]
 }
+```
