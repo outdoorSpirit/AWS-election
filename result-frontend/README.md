@@ -12,3 +12,30 @@ Substitute your bucket name in the file upload command. Files can also be upload
 cd result-frontend
 aws s3 cp . s3://RESULTBUCKETNAME --recursive --acl public-read
 ```
+
+
+## S3 sample bucket policy - integration with cloudfront
+
+```
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "PublicReadGetObject",
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": "s3:GetObject",
+            "Resource": "arn:aws:s3:::frontend-erjan-result/*"
+        },
+        {
+            "Sid": "2",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity E36TPZ2E5JVKVL"
+            },
+            "Action": "s3:GetObject",
+            "Resource": "arn:aws:s3:::frontend-erjan-result/*"
+        }
+    ]
+}
+```
