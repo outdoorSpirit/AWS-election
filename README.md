@@ -4,7 +4,8 @@ The application is already written, and all you have to do is deploy it using th
 
 We propose the following scheme: publish static files in S3 buckets (one for each frontend), host backends as Lambda functions and make them accessible using API Gateway. We suggest running the vote processor on EC2, although you may prefer pure serverless.
 
-![image](https://user-images.githubusercontent.com/1742301/106404317-b9022500-6432-11eb-94ed-602d2b27b8fb.png)
+![Screenshot_31](https://user-images.githubusercontent.com/4441068/212905590-feb78ec6-16ba-428e-99bd-c08d3da777ac.png)
+
 
 Note that while all the code has already been written, you still have a lot of work to do in creating resources (queues, DynamoDB tables) and assigning access to them. If necessary, use the hints located in the appropriate folders.
 
