@@ -15,7 +15,7 @@ def process_message(message):
         payload = message.message_attributes
         voter = payload['voter']['StringValue']
         vote  = payload['vote']['StringValue']
-
+        #store_vote(voter,vote)
         logging.info("Voter: %s, Vote: %s", voter, vote)
         update_count(vote)
         message.delete()
