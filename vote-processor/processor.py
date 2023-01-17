@@ -56,6 +56,7 @@ if __name__ == "__main__":
     while True:
         try:
             messages = queue.receive_messages(MessageAttributeNames=['vote','voter'])
+            #messages = queue.receive_messages()
         except KeyboardInterrupt:
            logging.info("Stopping...")
            break
