@@ -10,3 +10,38 @@ Substitute your bucket name in the file upload command. Files can also be upload
 cd voting-frontend
 aws s3 cp . s3://VOTINGBUCKETNAME --recursive --acl public-read
 ```
+
+
+
+## sample bucket policy for s3 vote - integration with cloudfront
+
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "PublicReadGetObject",
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": "s3:GetObject",
+            "Resource": "arn:aws:s3:::frontend-erjan-vote/*"
+        },
+        {
+            "Sid": "S3PolicyStmt-DO-NOT-MODIFY-1673091928784",
+            "Effect": "Allow",
+            "Principal": {
+                "Service": "logging.s3.amazonaws.com"
+            },
+            "Action": "s3:PutObject",
+            "Resource": "arn:aws:s3:::frontend-erjan-vote/*"
+        },
+        {
+            "Sid": "3",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity E2NHXOJ7VCG7IJ"
+            },
+            "Action": "s3:GetObject",
+            "Resource": "arn:aws:s3:::frontend-erjan-vote/*"
+        }
+    ]
+}
