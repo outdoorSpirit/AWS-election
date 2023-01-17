@@ -6,25 +6,39 @@ import boto3
 logging.getLogger().setLevel(logging.INFO)
 
 def lambda_handler(event, context):
-    #vote = json.loads(event['body'])['vote']
-    
-    payload = event['body'] #json.loads(message.body)
-    voter = payload['MessageAttributes']['voter']['Value']
-    vote  = payload['MessageAttributes']['vote']['Value']
-    print('---------------------------------------------------------------------')
-    print('---------------------------------------------------------------------')
-    print('---------------------------------------------------------------------')
-    print('---------------------------------------------------------------------')
-    
-    # vote = event['Records'][0]['Sns']['MessageAttributes']['vote']['Value']
-
-    # vote = x['vote']
-    # voter = 'default_voter'
-
-    logging.info('****Vote: %s, Voter: %s', vote, voter)
-    
     try:
+        logging.info(event)
+        
+        payload = event["body"]
+        print('----------------------------------')
+        print('event')
+        print(event)
+        print('event type')
+        print(type(event))
+        try:
+            print('---------------------------------------------')
+            print(payload)
+        except Exception as e:
+            print(e)
+            
+        print('---------------------------------------------------')
+        print('---------------------------------------------------------')
+        res = json.loads(payload)
+        print('--------------RES-----------------')
+        print(res)
+        print()
+        voter = res["MessageAttributes"]["voter"]["StringValue"] # this is good only for test event 
+        vote  = res["MessageAttributes"]["vote"]["StringValue"]
+        
+        # voter = res['MessageAttributes']['voter']['StringValue']
+        # vote  = res['MessageAttributes']['vote']['StringValue']
+        # print('-------------VOTER----------------')
+        # print('-------------------------------')
+        # print(voter)
+        # print(vote)
+        
         publish_vote(vote, voter)
+
     except:
         e = sys.exc_info()[0]
         logging.error(e)
@@ -50,4 +64,4 @@ def publish_vote(vote, voter):
             }          
         }
     )
-    logging.info('XXXX XXXXXX ***** message published')
+    logging.info('                                              MSG PUBLISHED - SUCCESS')
