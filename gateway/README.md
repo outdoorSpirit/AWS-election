@@ -5,7 +5,8 @@ Try to configure the API Gateway yourself using the knowledge from the recent mo
 ## CORS Settings
 Cross-Origin request settings. Please note that both GET and POST requests (to record a vote and get results) are allowed, and two request sources are connected: my-vote (voting) and my-vote-result (results).
 
-![image](https://user-images.githubusercontent.com/1742301/106400513-1b512a80-641f-11eb-8a07-c05b55ca3857.png)
+![Screenshot_8](https://user-images.githubusercontent.com/4441068/213271979-4f02d074-434b-4dc0-ab67-d68e54af215c.png)
+
 
 ## Routes
 
