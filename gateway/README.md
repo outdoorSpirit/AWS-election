@@ -14,7 +14,9 @@ Notice how accepted origins are not s3 buckets - but only 2 cloudfronts!
 
 In this example, I used one path `/my-vote`, and made the routing based on the request method `GET`/`POST`. This is not mandatory, you can do two different ways.
 
-![image](https://user-images.githubusercontent.com/1742301/106399262-dfff2d80-6417-11eb-9222-45eea37637e2.png)
+
+![Screenshot_40](https://user-images.githubusercontent.com/4441068/213276723-545166c8-a51d-4d75-9769-cb590d7c8477.png)
+
 
 ## Integrations
 
