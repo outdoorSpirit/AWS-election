@@ -26,7 +26,7 @@ function updateScores (){
             var a = parseInt(data.a || 0);
             var b = parseInt(data.b || 0);
             
-            console.log('**********ANIMATE STATS*************');
+            console.log('*************ANIMATE STATS*************');
             animateStats(a, b);
         
             if(a + b > 0){
@@ -42,10 +42,11 @@ function updateScores (){
 
 $.ajaxSetup({
     headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'text/plain',
         'Accept': 'application/json'
     }
 });
+
 document.body.style.opacity=1;
 console.log('------------main html inside--------------------')
 
