@@ -20,5 +20,5 @@ In this example, I used one path `/my-vote`, and made the routing based on the r
 
 This API must support two functions from AWS Lambda as integrations. This repository contains their code:
 
-* [Бэкенд голосованя](../voting-backend)
+* [Бэкенд голосования](../voting-backend)
 * [Бэкенд результатов](../result-backend)
