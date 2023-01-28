@@ -1,5 +1,3 @@
-
-
 import boto3
 import json
 import logging
@@ -11,21 +9,32 @@ queue = boto3.resource('sqs', region_name='us-east-1').get_queue_by_name(QueueNa
 table = boto3.resource('dynamodb', region_name='us-east-1').Table('Votes')
 
 def process_message(message):
+    print('----------process_message----------------------')
+    print('-------------SQS auto genereated msg------------------------')
+    print(type(message))
+
     try:
-        payload = message['messageAttributes'] #message.messageAttributes
-        vote  = payload['vote']['stringValue']       
+        print('----------process_message----------------------')
+
+        payload = message['messageAttributes']
+        vote  = payload['vote']['stringValue']
+        print('-----------------------------------------------')
+        print('vote ' + str(vote))
+        print('----------------------------------------')
         update_count(vote)
-    except Exception as e:        
+    except Exception as e:
+        print('-----EXCEPTION-----')
+        print(e)
         logging.info(sys.exc_info()[0])
 
 
 
 
 def update_count(vote):
-    logging.info('update count....')
+    print('update count....')
     cur_count = 0
     if vote == 'b':
-        logging.info('vote is b - update...')
+        print('vote is b - update...')
 
         response = table.get_item(Key = {'voter':'count'})
         item = response['Item']
@@ -33,7 +42,7 @@ def update_count(vote):
         table.put_item(Item = item)
             
     elif vote == 'a':
-        logging.info('vote is a - update...')
+        print('vote is a - update...')
         
         table.update_item(
         Key={'voter':'count'},
@@ -44,21 +53,24 @@ def update_count(vote):
 
 def lambda_handler(event,context):
 
+    logging.info(event)
+    logging.info(context)
+    logging.info('--------inside main-------')
+    
+    print(event)
+    print(context)
+    print('--------inside main-------')
 
     try:
-
+        print('--------------------------------------')
+        print(event)
+        print('------------------------inside try - queue.receive_messages-------------')
         message = event['Records'][0]
 
         try:           
             process_message(message)
         except :
-            print(' catch it here')
-            
-            # logging.info(sys.exc_info()[0])
-
-
-     
-        
+            print(' catch it here')                    
         return {'statusCode': 200, 'body': '{"status": "success"}'}
 
     except Exception as e:
