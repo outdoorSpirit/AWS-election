@@ -1,3 +1,5 @@
+
+
 import boto3
 import json
 import logging
@@ -67,10 +69,13 @@ def lambda_handler(event,context):
         print('------------------------inside try - queue.receive_messages-------------')
         message = event['Records'][0]
 
-        try:           
+        try:
+           
             process_message(message)
         except :
-            print(' catch it here')                    
+            print(' catch it here')
+
+
         return {'statusCode': 200, 'body': '{"status": "success"}'}
 
     except Exception as e:
