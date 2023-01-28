@@ -42,7 +42,10 @@ Challenge:
 
 
 
-## For terraform, i used serverless lambda instead of ec2
+
+For terraform, i used serverless lambda instead of ec2
+
+
 ![myaws vote diagram serverless](https://user-images.githubusercontent.com/4441068/215296130-e7308ea5-d779-4936-9fee-58a82e2dc820.png)
 
 
