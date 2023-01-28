@@ -1,0 +1,21 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor0",
+            "Effect": "Allow",
+            "Action": [
+                "sqs:DeleteMessage",
+                "sqs:GetQueueUrl",
+                "sqs:ReceiveMessage"
+            ],
+            "Resource": "arn:aws:sqs:us-east-1:025416187662:erjan"
+        },
+        {
+            "Sid": "VisualEditor1",
+            "Effect": "Allow",
+            "Action": "sqs:GetQueueAttributes",
+            "Resource": "arn:aws:sqs:us-east-1:025416187662:erjan"
+        }
+    ]
+}
