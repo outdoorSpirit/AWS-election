@@ -40,3 +40,10 @@ Challenge:
 
 ![Screenshot_31](https://user-images.githubusercontent.com/4441068/212555680-28762471-036b-4beb-af78-6c4e38e2276e.png)
 
+
+
+## For terraform, i used serverless lambda instead of ec2
+![myaws vote diagram serverless](https://user-images.githubusercontent.com/4441068/215296130-e7308ea5-d779-4936-9fee-58a82e2dc820.png)
+
+
+
