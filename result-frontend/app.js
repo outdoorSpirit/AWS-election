@@ -15,9 +15,18 @@ function animateStats (a,b){
     }
 }
 
+
+
+
+var backend_url = "${backend_api_gateway}" + "results"
+
+console.log('-----------------backend url--------------------')
+console.log(backend_url)
+
+
 function updateScores (){
     console.log('------------UPDATE SCORES FUNCTION--------------------')
-    $.get("https://5y7dfynd34.execute-api.us-east-1.amazonaws.com/results", null, function(result,status){
+    $.get(backend_url, null, function(result,status){
         if ("success" == status) {
             console.log('****************success***************************');          
             console.log(result);
