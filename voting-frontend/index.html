@@ -31,7 +31,10 @@
 
     <script>
 	
-      var backend_url = "https://5y7dfynd34.execute-api.us-east-1.amazonaws.com/voting"
+      var backend_url = "${backend_api_gateway}"+ "voting"
+      console.log('-----------------backend url--------------------')
+      console.log(backend_url)
+
 
 
       $.ajaxSetup({
@@ -85,6 +88,3 @@
     </script>
   </body>
 </html>
-
-  
-  
