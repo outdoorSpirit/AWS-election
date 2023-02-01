@@ -1,0 +1,840 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Metadata:
+    Generator: "former2"
+Description: ""
+Resources:
+    CloudFrontDistribution:
+        Type: "AWS::CloudFront::Distribution"
+        Properties:
+            DistributionConfig: 
+                Origins: 
+                  - 
+                    ConnectionAttempts: 3
+                    ConnectionTimeout: 10
+                    DomainName: !Sub "${S3Bucket}.s3.${AWS::Region}.amazonaws.com"
+                    Id: !Sub "${S3Bucket}.s3.${AWS::Region}.amazonaws.com"
+                    OriginPath: ""
+                    S3OriginConfig: 
+                        OriginAccessIdentity: "origin-access-identity/cloudfront/E36TPZ2E5JVKVL"
+                DefaultCacheBehavior: 
+                    AllowedMethods: 
+                      - "HEAD"
+                      - "GET"
+                      - "OPTIONS"
+                    CachedMethods: 
+                      - "HEAD"
+                      - "GET"
+                      - "OPTIONS"
+                    Compress: true
+                    CachePolicyId: "658327ea-f89d-4fab-a63d-7e88639e58f6"
+                    OriginRequestPolicyId: "88a5eaf4-2fd4-4709-b370-b4c650ea3fcf"
+                    ResponseHeadersPolicyId: "5cc3b908-e619-4b99-88e5-2cf7f45965bd"
+                    SmoothStreaming: false
+                    TargetOriginId: !Sub "${S3Bucket}.s3.${AWS::Region}.amazonaws.com"
+                    ViewerProtocolPolicy: "allow-all"
+                Comment: "RESULT"
+                PriceClass: "PriceClass_All"
+                Enabled: true
+                ViewerCertificate: 
+                    CloudFrontDefaultCertificate: true
+                    MinimumProtocolVersion: "TLSv1"
+                    SslSupportMethod: "vip"
+                Restrictions: 
+                    GeoRestriction: 
+                        RestrictionType: "none"
+                HttpVersion: "http2"
+                DefaultRootObject: "index.html"
+                IPV6Enabled: true
+                Logging: 
+                    Bucket: "cf-result-logs.s3.amazonaws.com"
+                    IncludeCookies: false
+                    Prefix: "who-viewed-when"
+
+    CloudFrontDistribution2:
+        Type: "AWS::CloudFront::Distribution"
+        Properties:
+            DistributionConfig: 
+                Origins: 
+                  - 
+                    ConnectionAttempts: 3
+                    ConnectionTimeout: 10
+                    DomainName: !Sub "${S3Bucket2}.s3.${AWS::Region}.amazonaws.com"
+                    Id: !Sub "${S3Bucket2}.s3.${AWS::Region}.amazonaws.com"
+                    OriginPath: ""
+                    S3OriginConfig: 
+                        OriginAccessIdentity: "origin-access-identity/cloudfront/E2NHXOJ7VCG7IJ"
+                DefaultCacheBehavior: 
+                    AllowedMethods: 
+                      - "HEAD"
+                      - "DELETE"
+                      - "POST"
+                      - "GET"
+                      - "OPTIONS"
+                      - "PUT"
+                      - "PATCH"
+                    CachedMethods: 
+                      - "HEAD"
+                      - "GET"
+                      - "OPTIONS"
+                    Compress: true
+                    CachePolicyId: "658327ea-f89d-4fab-a63d-7e88639e58f6"
+                    OriginRequestPolicyId: "88a5eaf4-2fd4-4709-b370-b4c650ea3fcf"
+                    ResponseHeadersPolicyId: "5cc3b908-e619-4b99-88e5-2cf7f45965bd"
+                    SmoothStreaming: false
+                    TargetOriginId: !Sub "${S3Bucket2}.s3.${AWS::Region}.amazonaws.com"
+                    ViewerProtocolPolicy: "allow-all"
+                Comment: "VOTE"
+                PriceClass: "PriceClass_All"
+                Enabled: true
+                ViewerCertificate: 
+                    CloudFrontDefaultCertificate: true
+                    MinimumProtocolVersion: "TLSv1"
+                    SslSupportMethod: "vip"
+                Restrictions: 
+                    GeoRestriction: 
+                        RestrictionType: "none"
+                HttpVersion: "http2"
+                DefaultRootObject: "index.html"
+                IPV6Enabled: true
+                Logging: 
+                    Bucket: "cf-vote-logs.s3.amazonaws.com"
+                    IncludeCookies: false
+                    Prefix: "who-voted-when"
+
+    EC2Instance:
+        Type: "AWS::EC2::Instance"
+        Properties:
+            ImageId: "ami-0b5eea76982371e91"
+            InstanceType: "t2.micro"
+            KeyName: "myvote"
+            AvailabilityZone: !GetAtt EC2Subnet.AvailabilityZone
+            Tenancy: "default"
+            SubnetId: !Ref EC2Subnet
+            EbsOptimized: false
+            SecurityGroupIds: 
+              - "sg-01afc2eba5b520f9b"
+            SourceDestCheck: true
+            BlockDeviceMappings: 
+              - 
+                DeviceName: "/dev/xvda"
+                Ebs: 
+                    Encrypted: false
+                    VolumeSize: 8
+                    SnapshotId: "snap-097c82c1f068b49cb"
+                    VolumeType: "gp2"
+                    DeleteOnTermination: true
+            UserData: "IyEvYmluL2Jhc2gKY3VybCBodHRwczovL3Jhdy5naXRodWJ1c2VyY29udGVudC5jb20vZXJqYW4vTXlWb3RlQVdTL21haW4vdm90ZS1wcm9jZXNzb3IvcHJvY2Vzc29yLnB5ID4gcHJvY2Vzc29yLnB5CmNobW9kICt4IHByb2Nlc3Nvci5weQp5dW0gLXkgaW5zdGFsbCBweXRob24tcGlwCnB5dGhvbiAtbSBwaXAgaW5zdGFsbCAtLXVzZXIgYm90bzMKLi9wcm9jZXNzb3IucHk="
+            IamInstanceProfile: !Ref IAMRole6
+            Tags: 
+              - 
+                Key: "Name"
+                Value: "vote-processor"
+            HibernationOptions: 
+                Configured: false
+            EnclaveOptions: 
+                Enabled: false
+
+    LambdaFunction:
+        Type: "AWS::Lambda::Function"
+        Properties:
+            Description: ""
+            FunctionName: "results"
+            Handler: "lambda_function.lambda_handler"
+            Architectures: 
+              - "x86_64"
+            Code: 
+                S3Bucket: "prod-04-2014-tasks"
+                S3Key: !Sub "/snapshots/${AWS::AccountId}/results-3a33a067-c711-4a7c-a9b1-7d215068f6c3"
+                S3ObjectVersion: "QiqpeChc6_Gs552IAgD7aBZZwykjSVne"
+            MemorySize: 128
+            Role: !GetAtt IAMRole4.Arn
+            Runtime: "python3.9"
+            Timeout: 3
+            TracingConfig: 
+                Mode: "PassThrough"
+            EphemeralStorage: 
+                Size: 512
+
+    LambdaFunction2:
+        Type: "AWS::Lambda::Function"
+        Properties:
+            Description: ""
+            FunctionName: "voting"
+            Handler: "lambda_function.lambda_handler"
+            Architectures: 
+              - "x86_64"
+            Code: 
+                S3Bucket: "prod-04-2014-tasks"
+                S3Key: !Sub "/snapshots/${AWS::AccountId}/voting-f2684d7f-4abb-4265-add7-edf4860adb28"
+                S3ObjectVersion: "ZmtZwWWuw5iTqOyFk6YakhAeTTowkj5E"
+            MemorySize: 128
+            Role: !GetAtt IAMRole8.Arn
+            Runtime: "python3.9"
+            Timeout: 3
+            TracingConfig: 
+                Mode: "PassThrough"
+            EphemeralStorage: 
+                Size: 512
+
+    S3Bucket:
+        Type: "AWS::S3::Bucket"
+        Properties:
+            BucketName: !Sub "frontend-${SNSTopic.TopicName}-result"
+            Tags: 
+              - 
+                Key: "frontend-result"
+                Value: ""
+            WebsiteConfiguration: 
+                IndexDocument: "index.html"
+
+    S3Bucket2:
+        Type: "AWS::S3::Bucket"
+        Properties:
+            BucketName: !Sub "frontend-${SNSTopic.TopicName}-vote"
+            Tags: 
+              - 
+                Key: "frontend"
+                Value: ""
+            LoggingConfiguration: 
+                DestinationBucketName: !Sub "${SNSTopic.TopicName}-vote-s3-access-logs"
+                LogFilePrefix: ""
+            WebsiteConfiguration: 
+                IndexDocument: "index.html"
+
+    DynamoDBTable:
+        Type: "AWS::DynamoDB::Table"
+        Properties:
+            AttributeDefinitions: 
+              - 
+                AttributeName: "voter"
+                AttributeType: "S"
+            BillingMode: "PAY_PER_REQUEST"
+            TableName: "Votes"
+            KeySchema: 
+              - 
+                AttributeName: "voter"
+                KeyType: "HASH"
+            StreamSpecification: 
+                StreamViewType: "NEW_AND_OLD_IMAGES"
+
+    EC2VPC:
+        Type: "AWS::EC2::VPC"
+        Properties:
+            CidrBlock: "10.0.0.0/24"
+            EnableDnsSupport: true
+            EnableDnsHostnames: true
+            InstanceTenancy: "default"
+
+    ApiGatewayV2Api:
+        Type: "AWS::ApiGatewayV2::Api"
+        Properties:
+            ApiKeySelectionExpression: "$request.header.x-api-key"
+            Description: "api for project my vote"
+            ProtocolType: "HTTP"
+            RouteSelectionExpression: "$request.method $request.path"
+            CorsConfiguration: 
+                AllowCredentials: false
+                AllowHeaders: 
+                  - "accept"
+                  - "content-type"
+                AllowMethods: 
+                  - "POST"
+                  - "GET"
+                  - "OPTIONS"
+                AllowOrigins: 
+                  - !Sub "https://${CloudFrontDistribution2.DomainName}"
+                  - !Sub "https://${CloudFrontDistribution.DomainName}"
+                MaxAge: 0
+            DisableExecuteApiEndpoint: false
+
+    ApiGatewayV2Stage:
+        Type: "AWS::ApiGatewayV2::Stage"
+        Properties:
+            StageName: "$default"
+            StageVariables: {}
+            ApiId: !Ref ApiGatewayV2Api
+            DeploymentId: "b18cmm"
+            RouteSettings: {}
+            DefaultRouteSettings: 
+                DetailedMetricsEnabled: false
+            AutoDeploy: true
+
+    ApiGatewayV2Route:
+        Type: "AWS::ApiGatewayV2::Route"
+        Properties:
+            ApiId: !Ref ApiGatewayV2Api
+            ApiKeyRequired: false
+            AuthorizationType: "NONE"
+            RequestParameters: {}
+            RouteKey: !Sub "POST /${LambdaFunction2}"
+            Target: !Sub "integrations/${ApiGatewayV2Integration}"
+
+    ApiGatewayV2Route2:
+        Type: "AWS::ApiGatewayV2::Route"
+        Properties:
+            ApiId: !Ref ApiGatewayV2Api
+            ApiKeyRequired: false
+            AuthorizationType: "NONE"
+            RequestParameters: {}
+            RouteKey: !Sub "GET /${LambdaFunction}"
+            Target: !Sub "integrations/${ApiGatewayV2Integration2}"
+
+    ApiGatewayV2Integration:
+        Type: "AWS::ApiGatewayV2::Integration"
+        Properties:
+            ApiId: !Ref ApiGatewayV2Api
+            ConnectionType: "INTERNET"
+            IntegrationMethod: "POST"
+            IntegrationType: "AWS_PROXY"
+            IntegrationUri: !GetAtt LambdaFunction2.Arn
+            TimeoutInMillis: 30000
+            PayloadFormatVersion: "2.0"
+
+    ApiGatewayV2Integration2:
+        Type: "AWS::ApiGatewayV2::Integration"
+        Properties:
+            ApiId: !Ref ApiGatewayV2Api
+            ConnectionType: "INTERNET"
+            IntegrationMethod: "POST"
+            IntegrationType: "AWS_PROXY"
+            IntegrationUri: !GetAtt LambdaFunction.Arn
+            TimeoutInMillis: 30000
+            PayloadFormatVersion: "2.0"
+
+    ApiGatewayV2Integration3:
+        Type: "AWS::ApiGatewayV2::Integration"
+        Properties:
+            ApiId: !Ref ApiGatewayV2Api
+            ConnectionType: "INTERNET"
+            IntegrationMethod: "POST"
+            IntegrationType: "AWS_PROXY"
+            IntegrationUri: !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:myfirstlambda"
+            TimeoutInMillis: 30000
+            PayloadFormatVersion: "2.0"
+
+    SNSTopicPolicy:
+        Type: "AWS::SNS::TopicPolicy"
+        Properties:
+            PolicyDocument: !Sub "{\"Version\":\"2008-10-17\",\"Id\":\"__default_policy_ID\",\"Statement\":[{\"Sid\":\"__default_statement_ID\",\"Effect\":\"Allow\",\"Principal\":{\"AWS\":\"*\"},\"Action\":[\"SNS:Publish\",\"SNS:RemovePermission\",\"SNS:SetTopicAttributes\",\"SNS:DeleteTopic\",\"SNS:ListSubscriptionsByTopic\",\"SNS:GetTopicAttributes\",\"SNS:AddPermission\",\"SNS:Subscribe\"],\"Resource\":\"${SNSTopic}\",\"Condition\":{\"StringEquals\":{\"AWS:SourceOwner\":\"${AWS::AccountId}\"}}},{\"Sid\":\"__console_pub_0\",\"Effect\":\"Allow\",\"Principal\":{\"AWS\":\"*\"},\"Action\":\"SNS:Publish\",\"Resource\":\"${SNSTopic}\"},{\"Sid\":\"__console_sub_0\",\"Effect\":\"Allow\",\"Principal\":{\"AWS\":\"*\"},\"Action\":\"SNS:Subscribe\",\"Resource\":\"${SNSTopic}\"}]}"
+            Topics: 
+              - !Ref SNSTopic
+
+    SNSTopic:
+        Type: "AWS::SNS::Topic"
+        Properties:
+            DisplayName: !GetAtt SQSQueue.QueueName
+            TopicName: !GetAtt SQSQueue.QueueName
+
+    SNSSubscription:
+        Type: "AWS::SNS::Subscription"
+        Properties:
+            TopicArn: !Ref SNSTopic
+            Endpoint: !Sub "arn:aws:sqs:${AWS::Region}:${AWS::AccountId}:${SNSTopic.TopicName}"
+            Protocol: "sqs"
+            RawMessageDelivery: "true"
+            Region: !Ref AWS::Region
+
+    SQSQueue:
+        Type: "AWS::SQS::Queue"
+        Properties:
+            DelaySeconds: "0"
+            MaximumMessageSize: "262144"
+            MessageRetentionPeriod: "345600"
+            ReceiveMessageWaitTimeSeconds: "0"
+            VisibilityTimeout: "30"
+            QueueName: "erjan"
+
+    SQSQueuePolicy:
+        Type: "AWS::SQS::QueuePolicy"
+        Properties:
+            PolicyDocument: !Sub "{\"Version\":\"2008-10-17\",\"Id\":\"__default_policy_ID\",\"Statement\":[{\"Sid\":\"__owner_statement\",\"Effect\":\"Allow\",\"Principal\":{\"AWS\":\"arn:aws:iam::${AWS::AccountId}:root\"},\"Action\":\"SQS:*\",\"Resource\":\"arn:aws:sqs:${AWS::Region}:${AWS::AccountId}:${SNSTopic.TopicName}\"},{\"Sid\":\"topic-subscription-${SNSTopic}\",\"Effect\":\"Allow\",\"Principal\":{\"AWS\":\"*\"},\"Action\":\"SQS:SendMessage\",\"Resource\":\"arn:aws:sqs:${AWS::Region}:${AWS::AccountId}:${SNSTopic.TopicName}\",\"Condition\":{\"ArnLike\":{\"aws:SourceArn\":\"${SNSTopic}\"}}}]}"
+            Queues: 
+              - !Sub "https://sqs.${AWS::Region}.amazonaws.com/${AWS::AccountId}/${SNSTopic.TopicName}"
+
+    IAMRole:
+        Type: "AWS::IAM::Role"
+        Properties:
+            Path: "/service-role/"
+            RoleName: "for_api-role-qvqsvvxs"
+            AssumeRolePolicyDocument: "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Action\":\"sts:AssumeRole\"}]}"
+            MaxSessionDuration: 3600
+            ManagedPolicyArns: 
+              - !Sub "arn:aws:iam::${AWS::AccountId}:policy/service-role/AWSLambdaBasicExecutionRole-27dc851a-5f74-4cc2-9e6e-794f817ad711"
+
+    IAMRole2:
+        Type: "AWS::IAM::Role"
+        Properties:
+            Path: "/service-role/"
+            RoleName: !Sub "${LambdaFunction}-role-9stwb69a"
+            AssumeRolePolicyDocument: "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Action\":\"sts:AssumeRole\"}]}"
+            MaxSessionDuration: 3600
+            ManagedPolicyArns: 
+              - !Sub "arn:aws:iam::${AWS::AccountId}:policy/service-role/AWSLambdaBasicExecutionRole-ef86603b-1836-4eef-91cd-d1cb8be35673"
+
+    IAMRole3:
+        Type: "AWS::IAM::Role"
+        Properties:
+            Path: "/"
+            RoleName: !Sub "s3-${SNSTopic.TopicName}"
+            AssumeRolePolicyDocument: "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"s3.amazonaws.com\"},\"Action\":\"sts:AssumeRole\"}]}"
+            MaxSessionDuration: 3600
+            ManagedPolicyArns: 
+              - "arn:aws:iam::aws:policy/TranslateReadOnly"
+              - "arn:aws:iam::aws:policy/TranslateFullAccess"
+            Description: "Allows S3 to call AWS services on your behalf."
+
+    IAMRole4:
+        Type: "AWS::IAM::Role"
+        Properties:
+            Path: "/service-role/"
+            RoleName: "results-role-cs7bdnlc"
+            AssumeRolePolicyDocument: "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Action\":\"sts:AssumeRole\"}]}"
+            MaxSessionDuration: 3600
+            ManagedPolicyArns: 
+              - !Ref IAMManagedPolicy10
+              - !Ref IAMManagedPolicy3
+              - !Sub "arn:aws:iam::${AWS::AccountId}:policy/service-role/AWSLambdaVPCAccessExecutionRole-716e4420-886d-452b-a2b9-d916cd7edcde"
+              - "arn:aws:iam::aws:policy/AWSLambdaInvocation-DynamoDB"
+              - "arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess"
+
+    IAMRole5:
+        Type: "AWS::IAM::Role"
+        Properties:
+            Path: "/"
+            RoleName: "sqs_apigateway_role"
+            AssumeRolePolicyDocument: "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Sid\":\"\",\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"apigateway.amazonaws.com\"},\"Action\":\"sts:AssumeRole\"}]}"
+            MaxSessionDuration: 3600
+            ManagedPolicyArns: 
+              - "arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs"
+              - "arn:aws:iam::aws:policy/AmazonSQSFullAccess"
+            Description: "Allows API Gateway to push logs to CloudWatch Logs."
+
+    IAMRole6:
+        Type: "AWS::IAM::Role"
+        Properties:
+            Path: "/"
+            RoleName: "vote-processor-ec2-role"
+            AssumeRolePolicyDocument: "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"ec2.amazonaws.com\"},\"Action\":\"sts:AssumeRole\"}]}"
+            MaxSessionDuration: 3600
+            ManagedPolicyArns: 
+              - !Ref IAMManagedPolicy7
+              - !Ref IAMManagedPolicy5
+            Description: "vote processor can receive from sqs and send messages to dynamodb"
+
+    IAMRole7:
+        Type: "AWS::IAM::Role"
+        Properties:
+            Path: "/service-role/"
+            RoleName: "vote_processor_ec2-role-6r4x3dcf"
+            AssumeRolePolicyDocument: "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Action\":\"sts:AssumeRole\"}]}"
+            MaxSessionDuration: 3600
+            ManagedPolicyArns: 
+              - !Ref IAMManagedPolicy7
+              - !Ref IAMManagedPolicy5
+              - !Sub "arn:aws:iam::${AWS::AccountId}:policy/service-role/AWSLambdaBasicExecutionRole-6cc57b7a-0289-4b56-a380-d0731b195cf5"
+
+    IAMRole8:
+        Type: "AWS::IAM::Role"
+        Properties:
+            Path: "/service-role/"
+            RoleName: "voting-role-z6z0brhg"
+            AssumeRolePolicyDocument: "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Action\":\"sts:AssumeRole\"}]}"
+            MaxSessionDuration: 3600
+            ManagedPolicyArns: 
+              - !Ref IAMManagedPolicy6
+              - !Sub "arn:aws:iam::${AWS::AccountId}:policy/service-role/AWSLambdaVPCAccessExecutionRole-716e4420-886d-452b-a2b9-d916cd7edcde"
+              - !Sub "arn:aws:iam::${AWS::AccountId}:policy/service-role/AWSLambdaBasicExecutionRole-427c92eb-1f05-4b19-b56b-5a9a21c52886"
+
+    IAMRole9:
+        Type: "AWS::IAM::Role"
+        Properties:
+            Path: "/service-role/"
+            RoleName: !Sub "${LambdaFunction2}-role-tiym3gs8"
+            AssumeRolePolicyDocument: "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Action\":\"sts:AssumeRole\"}]}"
+            MaxSessionDuration: 3600
+            ManagedPolicyArns: 
+              - !Ref IAMManagedPolicy2
+              - !Sub "arn:aws:iam::${AWS::AccountId}:policy/service-role/AWSLambdaSNSTopicDestinationExecutionRole-b1f9acb5-8c51-4416-9acd-2a62c7d445fc"
+              - !Ref IAMManagedPolicy4
+
+    IAMServiceLinkedRole:
+        Type: "AWS::IAM::ServiceLinkedRole"
+        Properties:
+            AWSServiceName: "ops.apigateway.amazonaws.com"
+            Description: "The Service Linked Role is used by Amazon API Gateway."
+
+    IAMManagedPolicy:
+        Type: "AWS::IAM::ManagedPolicy"
+        Properties:
+            ManagedPolicyName: "AWSLambdaBasicExecutionRole-26905855-e012-4435-a907-3405124b0309"
+            Path: "/service-role/"
+            PolicyDocument: !Sub |
+                {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Effect": "Allow",
+                            "Action": "logs:CreateLogGroup",
+                            "Resource": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:*"
+                        },
+                        {
+                            "Effect": "Allow",
+                            "Action": [
+                                "logs:CreateLogStream",
+                                "logs:PutLogEvents"
+                            ],
+                            "Resource": [
+                                "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/resize-image-kenjegalee:*"
+                            ]
+                        }
+                    ]
+                }
+
+    IAMManagedPolicy2:
+        Type: "AWS::IAM::ManagedPolicy"
+        Properties:
+            ManagedPolicyName: "AWSLambdaBasicExecutionRole-b4e0f21f-4840-4bfa-b6e1-e0f9b62c73c7"
+            Path: "/service-role/"
+            PolicyDocument: !Sub |
+                {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Effect": "Allow",
+                            "Action": "logs:CreateLogGroup",
+                            "Resource": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:*"
+                        },
+                        {
+                            "Effect": "Allow",
+                            "Action": [
+                                "logs:CreateLogStream",
+                                "logs:PutLogEvents"
+                            ],
+                            "Resource": [
+                                "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/${LambdaFunction2}:*"
+                            ]
+                        }
+                    ]
+                }
+
+    IAMManagedPolicy3:
+        Type: "AWS::IAM::ManagedPolicy"
+        Properties:
+            ManagedPolicyName: "AWSLambdaBasicExecutionRole-dbca2dcf-f8e8-49d6-bb7c-5ff50e1c8cef"
+            Path: "/service-role/"
+            PolicyDocument: !Sub |
+                {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Effect": "Allow",
+                            "Action": "logs:CreateLogGroup",
+                            "Resource": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:*"
+                        },
+                        {
+                            "Effect": "Allow",
+                            "Action": [
+                                "logs:CreateLogStream",
+                                "logs:PutLogEvents"
+                            ],
+                            "Resource": [
+                                "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/results:*"
+                            ]
+                        }
+                    ]
+                }
+
+    IAMManagedPolicy4:
+        Type: "AWS::IAM::ManagedPolicy"
+        Properties:
+            ManagedPolicyName: "AWSLambdaVPCAccessExecutionRole-3a7912c6-f863-4299-b9d1-3a29dd14736e"
+            Path: "/service-role/"
+            PolicyDocument: |
+                {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Effect": "Allow",
+                            "Action": [
+                                "ec2:CreateNetworkInterface",
+                                "ec2:DeleteNetworkInterface",
+                                "ec2:DescribeNetworkInterfaces"
+                            ],
+                            "Resource": "*"
+                        }
+                    ]
+                }
+
+    IAMManagedPolicy5:
+        Type: "AWS::IAM::ManagedPolicy"
+        Properties:
+            ManagedPolicyName: "ec2-can-access-sqs"
+            Path: "/"
+            PolicyDocument: !Sub |
+                {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Sid": "VisualEditor0",
+                            "Effect": "Allow",
+                            "Action": [
+                                "sqs:DeleteMessage",
+                                "sqs:GetQueueUrl",
+                                "sqs:ReceiveMessage"
+                            ],
+                            "Resource": "arn:aws:sqs:${AWS::Region}:${AWS::AccountId}:${SNSTopic.TopicName}"
+                        },
+                        {
+                            "Sid": "VisualEditor1",
+                            "Effect": "Allow",
+                            "Action": "sqs:GetQueueAttributes",
+                            "Resource": "arn:aws:sqs:${AWS::Region}:${AWS::AccountId}:${SNSTopic.TopicName}"
+                        }
+                    ]
+                }
+
+    IAMManagedPolicy6:
+        Type: "AWS::IAM::ManagedPolicy"
+        Properties:
+            ManagedPolicyName: "voting-backend-can-send-to-sns"
+            Path: "/"
+            PolicyDocument: !Sub |
+                {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Effect": "Allow",
+                            "Action": [
+                                "sns:Publish"
+                            ],
+                            "Resource": "${SNSTopic}"
+                        }
+                    ]
+                }
+
+    IAMManagedPolicy7:
+        Type: "AWS::IAM::ManagedPolicy"
+        Properties:
+            ManagedPolicyName: "ec2-can-access-dynamodb"
+            Path: "/"
+            PolicyDocument: !Sub |
+                {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Sid": "VisualEditor0",
+                            "Effect": "Allow",
+                            "Action": [
+                                "dynamodb:PutItem",
+                                "dynamodb:UpdateItem",
+                                "dynamodb:Get*",
+                                "dynamodb:Query",
+                                "dynamodb:Scan",
+                                "dynamodb:BatchWrite*",
+                                "dynamodb:CreateTable",
+                                "dynamodb:Delete*"
+                                
+                            ],
+                            "Resource": "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${DynamoDBTable}"
+                        }
+                    ]
+                }
+
+    IAMManagedPolicy8:
+        Type: "AWS::IAM::ManagedPolicy"
+        Properties:
+            ManagedPolicyName: "dynamodb_access_votes"
+            Path: "/"
+            PolicyDocument: !Sub |
+                {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Effect": "Allow",
+                            "Action": [
+                                "dynamodb:PutItem",
+                                "dynamodb:UpdateItem"
+                            ],
+                            "Resource": "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${DynamoDBTable}"
+                        }
+                    ]
+                }
+
+    IAMManagedPolicy9:
+        Type: "AWS::IAM::ManagedPolicy"
+        Properties:
+            ManagedPolicyName: "votes-test-dynamodb-lambda-get-item-policy"
+            Path: "/"
+            PolicyDocument: !Sub |
+                {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Sid": "VisualEditor0",
+                            "Effect": "Allow",
+                            "Action": [
+                                "dynamodb:DeleteItem",
+                                "dynamodb:GetShardIterator",
+                                "dynamodb:GetItem",
+                                "dynamodb:DescribeStream",
+                                "dynamodb:GetRecords"
+                            ],
+                            "Resource": "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/votes-test"
+                        }
+                    ]
+                }
+
+    IAMManagedPolicy10:
+        Type: "AWS::IAM::ManagedPolicy"
+        Properties:
+            ManagedPolicyName: "lambda_invoke_dynamodb_get_item"
+            Path: "/"
+            PolicyDocument: !Sub |
+                {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Sid": "VisualEditor0",
+                            "Effect": "Allow",
+                            "Action": [
+                                "dynamodb:DeleteItem",
+                                "dynamodb:GetShardIterator",
+                                "dynamodb:GetItem",
+                                "dynamodb:DescribeStream",
+                                "dynamodb:GetRecords"
+                            ],
+                            "Resource": "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${DynamoDBTable}"
+                        }
+                    ]
+                }
+
+    IAMManagedPolicy11:
+        Type: "AWS::IAM::ManagedPolicy"
+        Properties:
+            ManagedPolicyName: !Sub "sqs-${SNSTopic.TopicName}-my-vote"
+            Path: "/"
+            PolicyDocument: !Sub |
+                {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Effect": "Allow",
+                            "Action": [
+                                "sqs:GetQueueUrl",
+                                "sqs:ReceiveMessage",
+                                "sqs:DeleteMessage"
+                            ],
+                            "Resource": "arn:aws:sqs:${AWS::Region}:${AWS::AccountId}:${SNSTopic.TopicName}"
+                        }
+                    ]
+                }
+
+    IAMInstanceProfile:
+        Type: "AWS::IAM::InstanceProfile"
+        Properties:
+            Path: "/"
+            InstanceProfileName: !Ref IAMRole6
+            Roles: 
+              - !Ref IAMRole6
+
+    IAMAccessKey:
+        Type: "AWS::IAM::AccessKey"
+        Properties:
+            Status: "Active"
+            UserName: "admin"
+
+    IAMAccessKey2:
+        Type: "AWS::IAM::AccessKey"
+        Properties:
+            Status: "Active"
+            UserName: "former2-iac-generator"
+
+    EC2Volume:
+        Type: "AWS::EC2::Volume"
+        Properties:
+            AvailabilityZone: !GetAtt EC2Instance.AvailabilityZone
+            Encrypted: false
+            Size: 8
+            VolumeType: "gp2"
+            SnapshotId: "snap-097c82c1f068b49cb"
+            MultiAttachEnabled: false
+
+    EC2NetworkInterface:
+        Type: "AWS::EC2::NetworkInterface"
+        Properties:
+            Description: !Sub "AWS Lambda VPC ENI-${LambdaFunction2}-434f3861-dec2-41e2-8871-aba9fbb9d218"
+            PrivateIpAddress: "10.0.0.45"
+            PrivateIpAddresses: 
+              - 
+                PrivateIpAddress: "10.0.0.45"
+                Primary: true
+            SubnetId: !Ref EC2Subnet
+            SourceDestCheck: true
+            GroupSet: 
+              - "sg-01afc2eba5b520f9b"
+
+    EC2NetworkInterface2:
+        Type: "AWS::EC2::NetworkInterface"
+        Properties:
+            Description: ""
+            PrivateIpAddress: !GetAtt EC2Instance.PrivateIp
+            PrivateIpAddresses: 
+              - 
+                PrivateIpAddress: !GetAtt EC2Instance.PrivateIp
+                Primary: true
+            SubnetId: !Ref EC2Subnet
+            SourceDestCheck: true
+            GroupSet: 
+              - "sg-01afc2eba5b520f9b"
+
+    EC2NetworkInterfaceAttachment:
+        Type: "AWS::EC2::NetworkInterfaceAttachment"
+        Properties:
+            NetworkInterfaceId: "eni-04c7a8adb7484ca50"
+            DeviceIndex: 0
+            InstanceId: !Ref EC2Instance
+            DeleteOnTermination: true
+
+    EC2VPCCidrBlock:
+        Type: "AWS::EC2::VPCCidrBlock"
+        Properties:
+            VpcId: !Ref EC2VPC
+            Ipv6CidrBlock: "2600:1f10:4453:6100::/56"
+            Ipv6Pool: "Amazon"
+
+    EC2Subnet:
+        Type: "AWS::EC2::Subnet"
+        Properties:
+            AvailabilityZone: !Sub "${AWS::Region}d"
+            CidrBlock: !GetAtt EC2VPC.CidrBlock
+            VpcId: !Ref EC2VPC
+            MapPublicIpOnLaunch: false
+            Tags: 
+              - 
+                Key: "Name"
+                Value: "subnet1"
+
+    EC2InternetGateway:
+        Type: "AWS::EC2::InternetGateway"
+        Properties:
+            Tags: 
+              - 
+                Key: "Name"
+                Value: "ll"
+
+    EC2EIP:
+        Type: "AWS::EC2::EIP"
+        Properties:
+            Domain: "vpc"
+
+    EC2Route:
+        Type: "AWS::EC2::Route"
+        Properties:
+            DestinationCidrBlock: "0.0.0.0/0"
+            GatewayId: !Ref EC2InternetGateway
+            RouteTableId: !Ref EC2RouteTable
+
+    EC2RouteTable:
+        Type: "AWS::EC2::RouteTable"
+        Properties:
+            VpcId: !Ref EC2VPC
